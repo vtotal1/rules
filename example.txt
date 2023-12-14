@@ -1,0 +1,48 @@
+import requests
+import csv
+
+# Zabbix API URL
+api_url = 'https://your_zabbix_server/zabbix/api_jsonrpc.php'
+
+# API User Credentials
+username = 'your_username'
+password = 'your_password'
+
+# Login to Zabbix API and get authentication token
+login_data = {
+    'jsonrpc': '2.0',
+    'method': 'user.login',
+    'params': {
+        'user': username,
+        'password': password,
+    },
+    'id': 1,
+}
+
+response = requests.post(api_url, json=login_data, headers={'Content-Type': 'application/json'})
+auth_token = response.json()['result']
+
+# Get list of hosts
+host_data = {
+    'jsonrpc': '2.0',
+    'method': 'host.get',
+    'params': {
+        'output': ['hostid', 'host', 'tags'],
+    },
+    'auth': auth_token,
+    'id': 2,
+}
+
+response = requests.post(api_url, json=host_data, headers={'Content-Type': 'application/json'})
+hosts = response.json()['result']
+
+# Write host information to CSV file
+csv_file = 'zabbix_hosts.csv'
+with open(csv_file, 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['hostid', 'host', 'tags'])  # CSV header
+
+    for host in hosts:
+        writer.writerow([host['hostid'], host['host'], host.get('tags', '')])
+
+print(f'Host information exported to {csv_file}')
