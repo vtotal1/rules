@@ -1,7 +1,7 @@
 # rules
 Yara rules repository
 
-
+```
 #!/bin/bash
 set -e
 
@@ -138,3 +138,4 @@ echo ""
 echo "Setup complete!"
 echo "Logs will be written to: /var/log/iptables_dropped.log"
 echo "IMPORTANT: Replace ALLOWED_IP1 and ALLOWED_IP2 with your actual IPs!"
+```
